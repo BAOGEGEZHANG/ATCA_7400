@@ -1,0 +1,18 @@
+general dirctory -
+
+This directory contains the top-level header and source code for 
+API's for driver, device and port components of Arsenal driver 
+software. In addition, it contains support for a few more API's 
+that are related to MPIF block. The source files are named
+accordingly.
+
+This directory has both, private(driver internal use only) as well
+as public(customer and driver use) header files.
+
+The private header files are solely for the driver internal use 
+only and nothing is exported for the customer use from these. 
+
+Te public header files, in general are of two types - 
+arn_xxx_data.h contain public data-structures, type defines,
+               macro's, etc..
+arn_xxx_api.h contain public API proto-types(as externs).

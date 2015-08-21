@@ -1,0 +1,121 @@
+#/***********************************************************************/
+#/* This file contains unpublished documentation and software           */
+#/* proprietary to Cortina Systems Incorporated. Any use or disclosure, */
+#/* in whole or in part, of the information in this file without a      */
+#/* written consent of an officer of Cortina Systems Incorporated is    */
+#/* strictly prohibited.                                                */
+#/* Copyright (c) 2002 by Cortina Systems Incorporated.                 */
+#/***********************************************************************/
+#
+# Makefile common sections for building target of MILAN2
+#
+# This file is released on Mon May  1 00:51:07 2006.
+#
+
+###########################################
+# common driver sub-directories
+###########################################
+M2RTARGETDIR    =    $(CHIPROOT)/targets
+CSPLATFORMDIR   =    $(CHIPROOT)/../platform
+M2RMODULEDIR    =    $(CHIPROOT)/modules
+M2RGENERALDIR   =    $(M2RMODULEDIR)/general
+BUILDDIR        =    $(M2RTARGETDIR)/$(OSTYPE)
+
+###########################################
+# common macros
+###########################################
+# PLATFORM settings other than RELEASE_PLATFROM are used internally 
+#  by CORTINA for debug purpose.
+PLATFORM        =    RELEASE_PLATFORM
+OSTYPE          =    $(shell uname)
+
+#ENDIAN          =    $(shell cd $(CSPLATFORMDIR) ; \
+			     gcc which_endian.c -o test_endian ; \
+			     ./test_endian)
+
+# big endian for powerpc
+ENDIAN          = CS_BIG_ENDIAN
+# little endian for pc
+#ENDIAN          = CS_LITTLE_ENDIAN
+
+PLATFORM_INC    =
+INC             =  $(PLATFORM_INC) -I$(CHIPROOT)       \
+                   -I$(CSPLATFORMDIR) -I$(M2RGENERALDIR) \
+                   -I$(M2RMODULEDIR)/SPI42            \
+                   -I$(M2RMODULEDIR)/PPRBS            \
+                   -I$(M2RMODULEDIR)/Framer           \
+                   -I$(M2RMODULEDIR)/RingMAC          \
+                   -I$(M2RMODULEDIR)/XGXS             \
+                   -I$(M2RMODULEDIR)/ETH              \
+                   -I$(M2RMODULEDIR)/LIF
+
+###########################################
+# common tools options
+###########################################
+#CC              =    gcc -O3
+
+#CFLAGS          =    -Werror -Wall     
+CFLAGS          =   -D$(PLATFORM) -D$(ENDIAN) -D$(CHIP) -D$(OSTYPE) \
+                     $(INC)
+
+###########################################
+# customer-specific compiling macros
+###########################################
+# Here are the customer-specific settings which should be 
+# taken care by customer:
+
+# 1. POSIX_PTHREAD support:
+# ========================
+#   MILAN2 Driver provides some useful utility APIs to 
+# support lab debug/test, but requires the support of
+# POSIX PTHREAD library.  Since POSIX PTHREAD library is 
+# not supported by some RTOS, typically, VxWorks, MILAN2 
+# driver disables compiling this part of code by default.
+# If the customer wants to use these APIs, they should
+# follow NON RELEASE_PLATFORM to include the corresponding
+# compiling macro "-DPOSIX_PTHREAD".
+#      
+#CFLAGS        +=  -DPOSIX_PTHREAD
+
+# 2. Inline functions
+# ===================
+# For performance reasons, by default the driver uses inline 
+# functions via the __inline__ utility. The customer has the option 
+# of not using it(either it is not supported by the compiler or 
+# it is disabled through the compiler switch). If that is the case, 
+# then the user needs include the compile macro, 
+# "-DCS_DONT_USE_INLINE".
+#
+# CFLAGS	+= -DCS_DONT_USE_INLINE
+#
+
+# 3. Standard libraries
+# =====================
+# If the customer environment does not support some of the standard
+# C libraries(like stdio.h, unistd.h, etc.), then use the 
+# -DCS_DONT_USE_STDLIB compiler macro.
+#
+#  CFLAGS	+= -DCS_DONT_USE_STDLIB
+#
+
+# 4. Variable Argument list
+# ===========================
+# if the customer environment does not support handling of 
+# variable argument list, then use the
+# -DCS_DONT_USE_VAR_ARGS compiler macro.
+# Note, that if CS_DONT_USE_STDLIB is defined, then the driver
+# will automatically define CS_DONT_USE_VAR_ARGS if it hasn't
+# been explicitly defined.
+#
+#  CFLAGS	+= -DCS_DONT_USE_VAR_ARGS
+#
+
+# 5. Designated Initializer
+# =========================
+# If the customer's compiler does not support ISO standard
+# C99 array's designated initializer then use the compiler macro,
+# -DCS_DONT_USE_DESGNTD_INITLZR
+#
+# CFLAGS += -DCS_DONT_USE_DESGNTD_INITLZR
+#
+

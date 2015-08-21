@@ -1,0 +1,35 @@
+Header files:
+m2r_cb.h	: PRIVATE header file - no need for other modules to 
+		  explicitly include this file. 
+		  Contains driver/device/port control blocks and other 
+		  data structures.
+
+m2r_common.h	: PRIVATE header file - other modules would need to include
+		  this(should come immediately after the include of platform  
+		  header files). This header file includes m2r_cb.h.
+		  Contains some defines, macros, inline functions for 
+		  access to control blocks and data structures.
+          
+m2r_public.h	: PUBLIC header file - other modules will require this 
+		  header file. It does not include any of the
+		  private header files.
+		  Contains typedef's, defines, etc. which will be used 
+		  for API arguments. 
+		  This could be included in the top header file(in MILAN2
+		  and ROMA directories) - may not be necessary to 
+		  include it there explicitly as other header files will
+		  be including it. If included, it should be somewhere at
+		  the top of the include list.
+
+m2r_gen.h       : PUBLIC header file for the general module. 
+		  It does not include any of the private header files.
+		  Contains public data structures and API's.      
+		  This internally will include other modules public header
+		  files as the data structures here are made up of 
+		  Other modules do not need to include this one. But if 
+		  they do, then they have to make sure that their include
+		  paths(-I switch in Makefile) is set up properly based
+		  on what module public header files this includes.
+		  individual structures in other modules.
+		  This should be at the bottom of the list in the top
+		  header file(in MILAN2 and ROMA directories).

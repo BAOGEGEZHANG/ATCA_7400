@@ -1,0 +1,1 @@
+cmd_/home/cvspub/common/p1020_etx_v3.5.3/cli/drv/qnf.ko := powerpc-fsl-linux-gnuspe-ld -m elf32ppc -r  -T /home/cvspub/prj_s2400/kernel/scripts/module-common.lds arch/powerpc/lib/crtsavres.o --build-id  -o /home/cvspub/common/p1020_etx_v3.5.3/cli/drv/qnf.ko /home/cvspub/common/p1020_etx_v3.5.3/cli/drv/qnf.o /home/cvspub/common/p1020_etx_v3.5.3/cli/drv/qnf.mod.o

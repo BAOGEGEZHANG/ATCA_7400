@@ -1,0 +1,58 @@
+#!/bin/sh
+
+Usage="$0 [-c <gcc|cc>] [-a <OSTYPE>]"
+
+OSTYPE=`uname`
+CC='gcc'
+SRC='which_endian'
+
+case "$1" in
+'-c')
+    CC="$2"
+    case "$3" in
+    '-a')
+        OSTYPE="$4"
+        ;;
+    '')
+        ;;
+    *)
+        echo "ERROR: Unknown option - $3 !!!"
+        echo "Usage: $Usage"
+        exit 1
+        ;;
+    esac
+    ;;
+'-a')
+    OSTYPE="$2"
+    case "$3" in
+    '-c')
+        CC="$4"
+        ;;
+    '')
+        ;;
+    *)
+        echo "ERROR: Unknown option - $3 !!!"
+        echo "Usage: $Usage"
+        exit 1
+        ;;
+    esac
+    ;;
+'')
+    ;;
+*)
+    echo "ERROR: Unknown option - $1 !!!"
+    echo "Usage: $Usage"
+    exit 1
+    ;;
+esac
+
+if [ ! -d $OSTYPE ]; then
+  mkdir $OSTYPE
+fi
+
+if [ ! -f "$OSTYPE/$SRC.o" ]; then
+  $CC "$SRC.c" -o "$OSTYPE/$SRC.o" 
+fi
+
+exit 0
+
